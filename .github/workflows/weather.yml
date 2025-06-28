@@ -17,6 +17,7 @@ jobs:
           pip install pywhatkit requests geopy
           sudo apt-get install -y chromium-chromedriver
       - name: Run script
-        run: python weather update.py
+        - run: python weather_update.py
+
         env:
           RECIPIENT_NUMBERS: ${{ secrets.RECIPIENT_NUMBERS }}
