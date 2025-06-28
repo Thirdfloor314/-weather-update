@@ -1,0 +1,22 @@
+name: Eswatini Weather Alert
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 6AM UTC (8AM Eswatini time)
+  workflow_dispatch:  # Allow manual runs
+jobs:
+  send-alert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          pip install pywhatkit requests geopy
+          sudo apt-get install -y chromium-chromedriver
+      - name: Run script
+        run: python "weather update.py"
+        env:
+          RECIPIENT_NUMBERS: ${{ secrets.RECIPIENT_NUMBERS }}
