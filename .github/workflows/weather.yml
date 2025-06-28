@@ -1,8 +1,8 @@
 name: Essential Weather Alert
 on:
   schedule:
-    - cron: '0 6 * * *'  # 6AM UTC (8AM Eswatini time) - Removed extra *
-  workflow_dispatch:  # Allow manual runs
+    - cron: '0 6 * * *'  # 6AM UTC
+  workflow_dispatch:
 
 jobs:
   send-alert:
@@ -17,10 +17,13 @@ jobs:
           
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgtk-3-dev libxss1
           pip install pywhatkit requests geopy
-          sudo apt-get install -y chromium-chromedriver
           
-      - name: Run script
-        run: python weather_update.py
+      - name: Run script with virtual display
+        run: |
+          xvfb-run -a python weather_update.py
         env:
-          RECIPIENT_NUMBERS: ${{ secrets.RECIPIENT_NUMBERS }}  # Fixed syntax
+          RECIPIENT_NUMBERS: ${{ secrets.RECIPIENT_NUMBERS }}
+          DISPLAY: :99  # Required for headless operation
