@@ -1,0 +1,11 @@
+- name: Install Node.js
+  uses: actions/setup-node@v2
+  with:
+    node-version: '16'
+    
+- name: Run WhatsApp bot
+  run: |
+    npm install whatsapp-web.js qrcode-terminal
+    node send_whatsapp.js
+  env:
+    RECIPIENT_NUMBERS: ${{ secrets.RECIPIENT_NUMBERS }}  # Format: "+268123,+268456"
